@@ -1,0 +1,36 @@
+{
+  "name": "@pown/dicts",
+  "version": "2.0.0",
+  "description": "Pownage guaranteed",
+  "main": "lib/index.js",
+  "scripts": {
+    "dicts": "POWN_ROOT=. pown-cli dicts",
+    "text": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pownjs/pown-dicts.git"
+  },
+  "keywords": [
+    "exploit",
+    "framework"
+  ],
+  "author": "pdp <pdp@gnucitizen.org>",
+  "contributors": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pownjs/pown-dicts/issues"
+  },
+  "homepage": "https://github.com/pownjs/pown-dicts#readme",
+  "devDependencies": {
+    "@pown/cli": "^2.0.6"
+  },
+  "pown": {
+    "commands": [
+      "lib/command.js"
+    ]
+  },
+  "dependencies": {
+    "minimatch": "^3.0.4"
+  }
+}
