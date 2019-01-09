@@ -39,6 +39,19 @@ Options:
   --regex, -r     Search with regex                   [boolean] [default: false]
 ```
 
+## Supported Dictionaries
+
+The following dictionaries are currently supported by this module:
+
+* https://github.com/sullo/nikto.git
+* https://github.com/bitquark/dnspop.git
+* https://github.com/fuzzdb-project/fuzzdb.git
+* https://github.com/digination/dirbuster-ng.git
+* https://github.com/foospidy/payloads.git
+* https://github.com/pownjs/pown-lists.git
+* https://github.com/danielmiessler/SecLists
+* https://github.com/berzerk0/Probable-Wordlists
+
 ## Improvements
 
 This is a great start but there are a number of things that the original author would like to improve. In no particular order here is the current wish list:
