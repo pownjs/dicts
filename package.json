@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "dicts": "POWN_ROOT=. pown-cli dicts",
+    "build": "./scripts/build-dicts.sh",
     "test": "mocha"
   },
   "repository": {
