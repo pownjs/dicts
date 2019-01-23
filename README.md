@@ -60,3 +60,5 @@ This is a great start but there are a number of things that the original author 
 
 * Ability to transform/cleanup the file output
 * Download progress bar - this could be another module providing this feature
+* Add the commonspeak datasets - those that work
+
