@@ -3,6 +3,8 @@
 DIR=`dirname $0`
 URL="https://cdn.jsdelivr.net/gh"
 
+# THIS FILE REQUIRES REWRITING
+
 (
     DIR=`mktemp -d`
     cd $DIR
@@ -186,3 +188,27 @@ URL="https://cdn.jsdelivr.net/gh"
     echo "exports.dicts = dicts"
     rm -rf $DIR
 ) > $DIR/../lib/dicts/probable-wordlists.js
+
+(
+    DIR=`mktemp -d`
+    cd $DIR
+    git clone --depth 1 'https://github.com/danielmiessler/RobotsDisallowed'
+    REV=`cd *; git rev-parse HEAD`
+    cd RobotsDisallowed
+    rm -rf .git .gitignore
+    echo "const dicts = {"
+    echo "    'robots-disallowed': {"
+    ls *.txt | while read L
+    do
+        N=`echo $L | cut -d '/' -f4-`
+        P="$URL/danielmiessler/RobotsDisallowed@$REV/$N"
+				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+
+        echo "        '$N': {uri: '$P', stats: '$S'},"
+    done
+    echo "    }"
+    echo "}"
+    echo
+    echo "exports.dicts = dicts"
+    rm -rf $DIR
+) > $DIR/../lib/dicts/robots-disallowed.js
