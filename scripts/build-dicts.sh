@@ -220,3 +220,27 @@ URL="https://cdn.jsdelivr.net/gh"
     echo "exports.dicts = dicts"
     rm -rf $DIR
 ) > $DIR/../lib/dicts/robots-disallowed.js
+
+(
+    DIR=`mktemp -d`
+    cd $DIR
+    git clone --depth 1 'https://github.com/assetnote/commonspeak2-wordlists'
+    cd *
+    REV=`git rev-parse HEAD`
+    rm -rf ./.git*
+    echo "const dicts = {"
+    echo "    'commonspeak2': {"
+    find ./ -type f \( -path '*' \) | grep -vi -e 'LICENSE' -e '.md' | while read L
+    do
+        N=`echo $L | cut -d '/' -f2-`
+        P="$URL/assetnote/commonspeak2-wordlists@$REV/$N"
+				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+
+        echo "        '$N': {uri: '$P', stats: '$S'},"
+    done
+    echo "    }"
+    echo "}"
+    echo
+    echo "exports.dicts = dicts"
+    rm -rf $DIR
+) > $DIR/../lib/dicts/commonspeak2.js
