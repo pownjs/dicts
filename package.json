@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/pownjs/pown-dicts#readme",
   "devDependencies": {
-    "@pown/cli": "^2.15.0"
+    "@pown/cli": "^2.19.0"
   },
   "pown": {
     "commands": [
