@@ -18,9 +18,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/sullo/nikto@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -42,9 +42,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/bitquark/dnspop@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -66,9 +66,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/fuzzdb-project/fuzzdb@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -90,9 +90,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/digination/dirbuster-ng@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -114,9 +114,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/foospidy/payloads@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -138,9 +138,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/pownjs/pown-lists@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -158,13 +158,13 @@ URL="https://cdn.jsdelivr.net/gh"
     rm -rf ./.git*
     echo "const dicts = {"
     echo "    'seclists': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e 'README' -e 'LICENSE' -e 'CONTRIBUTING' -e 'icloud' | while read L
+    find ./ -type f \( -path '*' \) | grep -vi -e 'README' -e 'LICENSE' -e 'CONTRIBUTING' -e 'CONTRIBUTORS' -e 'icloud' | while read L
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/danielmiessler/SecLists@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -186,9 +186,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/berzerk0/Probable-Wordlists@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -210,9 +210,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/danielmiessler/RobotsDisallowed@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
@@ -234,9 +234,9 @@ URL="https://cdn.jsdelivr.net/gh"
     do
         N=`echo $L | cut -d '/' -f2-`
         P="$URL/assetnote/commonspeak2-wordlists@$REV/$N"
-				S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        '$N': {uri: '$P', stats: '$S'},"
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
     done
     echo "    }"
     echo "}"
