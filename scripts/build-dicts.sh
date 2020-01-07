@@ -257,7 +257,7 @@ URL="https://cdn.jsdelivr.net/gh"
     find ./ -type f \( -path '*' \) | grep -vi -e '.md' | while read L
     do
         N=`echo $L | cut -d '/' -f2-`
-        P="$URL/assetnote/commonspeak2-wordlists@$REV/$N"
+        P="$URL/arkadiyt/bounty-targets-data@$REV/$N"
 		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
         echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
