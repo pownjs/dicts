@@ -268,3 +268,27 @@ URL="https://cdn.jsdelivr.net/gh"
     echo "exports.dicts = dicts"
     rm -rf $DIR
 ) > $DIR/../lib/dicts/bounty-targets-data.js
+
+(
+    DIR=`mktemp -d`
+    cd $DIR
+    git clone --depth 1 'https://github.com/random-robbie/bruteforce-lists'
+    cd *
+    REV=`git rev-parse HEAD`
+    rm -rf ./.git*
+    echo "const dicts = {"
+    echo "    'random-robbie-bruteforce-lists': {"
+    find ./ -type f \( -path '*' \) | grep -vi -e '.md' | while read L
+    do
+        N=`echo $L | cut -d '/' -f2-`
+        P="$URL/random-robbie/bruteforce-lists@$REV/$N"
+		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+
+        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
+    done
+    echo "    }"
+    echo "}"
+    echo
+    echo "exports.dicts = dicts"
+    rm -rf $DIR
+) > $DIR/../lib/dicts/random-robbie-bruteforce-lists.js
