@@ -27,7 +27,7 @@ function generate {
 
         echo "const { line } = require('../helpers')"
         echo
-        echo "const prefix = '$git_name@${REV}'"
+        echo "const p = '$git_name@${REV}'"
         echo
         echo "const dicts = {"
         echo "    '$dict_name': {"
@@ -35,10 +35,8 @@ function generate {
         eval $file_selector | while read L
         do
             N=`echo $L | cut -d '/' -f2-`
-            P="$N"
-    		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-            echo "        ...line({prefix, suffix: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`}),"
+            echo "        ...line({p, s: `jq -n --arg p "$N" '$p'`, l: `cat "$L" | wc -l | tr -d ' '`, b: `cat "$L" | wc -c | tr -d ' '` }),"
         done
 
         echo "    }"
@@ -50,17 +48,17 @@ function generate {
     ) > "$SCRIPT_DIR/../lib/dicts/$dict_name.js"
 }
 
-generate 'sullo/nikto.git' 'nikto' "find ./ -type f \( -path '*/program/databases/*' \)" &
-generate 'bitquark/dnspop.git' 'dnspop' "find ./ -type f \( -path '*/results/*' \) | grep -vi -e 'with_count'" &
-generate 'fuzzdb-project/fuzzdb.git' 'fuzzdb' "find ./ -type f \( -path '*/attack/*' -or -path '*/discovery/*' -or -path '*/regex/*' -or -path '*/wordlists-misc/*' -or -path '*/wordlists-user-passwd/*' \) | grep -vi -e 'README'" &
-generate 'digination/dirbuster-ng.git' 'dirbuster-ng' "find ./ -type f \( -path '*/wordlists/*' \)" &
-generate 'foospidy/payloads.git' 'foospidy' "find ./ -type f \( -path '*/other/*' -or -path '*/owasp/*' \)" &
-generate 'pownjs/pown-lists.git' 'pown-lists' "find ./ -type f \( -path '*/data/*' \)" &
-generate 'danielmiessler/SecLists.git' 'seclists' "find ./ -type f \( -path '*' \) | grep -vi -e 'Web-Shells' -e 'Payloads' -e 'icloud'" &
-generate 'berzerk0/Probable-Wordlists.git' 'probable-wordlists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md' -e '.rule' -e '.torrent'" &
-generate 'danielmiessler/RobotsDisallowed.git' 'robots-disallowed' "ls *.txt" &
-generate 'assetnote/commonspeak2-wordlists.git' 'commonspeak2' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
-generate 'arkadiyt/bounty-targets-data.git' 'bounty-targets-data' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
-generate 'random-robbie/bruteforce-lists.git' 'random-robbie-bruteforce-lists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
+generate 'sullo/nikto' 'nikto' "find ./ -type f \( -path '*/program/databases/*' \)" &
+generate 'bitquark/dnspop' 'dnspop' "find ./ -type f \( -path '*/results/*' \) | grep -vi -e 'with_count'" &
+generate 'fuzzdb-project/fuzzdb' 'fuzzdb' "find ./ -type f \( -path '*/attack/*' -or -path '*/discovery/*' -or -path '*/regex/*' -or -path '*/wordlists-misc/*' -or -path '*/wordlists-user-passwd/*' \) | grep -vi -e 'README'" &
+generate 'digination/dirbuster-ng' 'dirbuster-ng' "find ./ -type f \( -path '*/wordlists/*' \)" &
+generate 'foospidy/payloads' 'foospidy' "find ./ -type f \( -path '*/other/*' -or -path '*/owasp/*' \)" &
+generate 'pownjs/pown-lists' 'pown-lists' "find ./ -type f \( -path '*/data/*' \)" &
+generate 'danielmiessler/SecLists' 'seclists' "find ./ -type f \( -path '*' \) | grep -vi -e 'Web-Shells' -e 'Payloads' -e 'icloud'" &
+generate 'berzerk0/Probable-Wordlists' 'probable-wordlists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md' -e '.rule' -e '.torrent'" &
+generate 'danielmiessler/RobotsDisallowed' 'robots-disallowed' "ls *.txt" &
+generate 'assetnote/commonspeak2-wordlists' 'commonspeak2' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
+generate 'arkadiyt/bounty-targets-data' 'bounty-targets-data' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
+generate 'random-robbie/bruteforce-lists' 'random-robbie-bruteforce-lists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
 
 wait
