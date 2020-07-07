@@ -1,294 +1,66 @@
 #!/usr/bin/env bash
 
-DIR=`dirname $0`
-URL="https://cdn.jsdelivr.net/gh"
+SCRIPT_DIR=`dirname $0`
 
-# THIS FILE REQUIRES REWRITING
+function generate {
+    git_name="$1"
+    dict_name="$2"
+    file_selector="$3"
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/sullo/nikto.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf */.git*
-    echo "const dicts = {"
-    echo "    'nikto': {"
-    find ./ -type f \( -path '*/program/databases/*' \) | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/sullo/nikto@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+    (
+        DIR=`mktemp -d`
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/nikto.js
+        cd $DIR
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/bitquark/dnspop.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf */.git*
-    echo "const dicts = {"
-    echo "    'dnspop': {"
-    find ./ -type f \( -path '*/results/*' \) | grep -vi -e '.gitignore' -e 'with_count' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/bitquark/dnspop@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+        git clone --depth 1 "https://github.com/$git_name"
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/dnspop.js
+        cd *
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/fuzzdb-project/fuzzdb.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'fuzzdb': {"
-    find ./ -type f \( -path '*/attack/*' -or -path '*/discovery/*' -or -path '*/regex/*' -or -path '*/web-backdoors/*' -or -path '*/wordlists-misc/*' -or -path '*/wordlists-user-passwd/*' \) | grep -vi -e 'README' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/fuzzdb-project/fuzzdb@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+        REV=`git rev-parse HEAD`
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/fuzzdb.js
+        rm -rf .git*
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/digination/dirbuster-ng.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'dirbuster-ng': {"
-    find ./ -type f \( -path '*/wordlists/*' \) | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/digination/dirbuster-ng@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+        find ./ -type f \( -iname '*.gif' -or -iname '*.png' -or -iname '*.jpg' -or -iname '*.jpeg' \) -exec rm -rf '{}' ';'
+        find ./ -type f \( -iname 'README' -or -iname 'LICENSE' -or -iname 'CONTRIBUTING' -or -iname 'CONTRIBUTORS' \) -exec rm -rf '{}' ';'
+        find ./ -type f \( -iname 'README.md' -or -iname 'LICENSE.md' -or -iname 'CONTRIBUTING.md' -or -iname 'CONTRIBUTORS.md' \) -exec rm -rf '{}' ';'
+        find ./ -type f \( -iname 'README.txt' -or -iname 'LICENSE.txt' -or -iname 'CONTRIBUTING.txt' -or -iname 'CONTRIBUTORS.txt' \) -exec rm -rf '{}' ';'
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/dirbuster-ng.js
+        echo "const { line } = require('../helpers')"
+        echo
+        echo "const prefix = '$git_name@${REV}'"
+        echo
+        echo "const dicts = {"
+        echo "    '$dict_name': {"
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/foospidy/payloads.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'foospidy': {"
-    find ./ -type f \( -path '*/other/*' -or -path '*/owasp/*' \) | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/foospidy/payloads@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+        eval $file_selector | while read L
+        do
+            N=`echo $L | cut -d '/' -f2-`
+            P="$N"
+    		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/foospidy.js
+            echo "        ...line({prefix, suffix: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`}),"
+        done
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/pownjs/pown-lists.git'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'pown-lists': {"
-    find ./ -type f \( -path '*/data/*' \) | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/pownjs/pown-lists@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+        echo "    }"
+        echo "}"
+        echo
+        echo "exports.dicts = dicts"
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/pown-lists.js
+        rm -rf $DIR
+    ) > "$SCRIPT_DIR/../lib/dicts/$dict_name.js"
+}
 
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/danielmiessler/SecLists'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'seclists': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e 'README' -e 'LICENSE' -e 'CONTRIBUTING' -e 'CONTRIBUTORS' -e 'icloud' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/danielmiessler/SecLists@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
+generate 'sullo/nikto.git' 'nikto' "find ./ -type f \( -path '*/program/databases/*' \)" &
+generate 'bitquark/dnspop.git' 'dnspop' "find ./ -type f \( -path '*/results/*' \) | grep -vi -e 'with_count'" &
+generate 'fuzzdb-project/fuzzdb.git' 'fuzzdb' "find ./ -type f \( -path '*/attack/*' -or -path '*/discovery/*' -or -path '*/regex/*' -or -path '*/wordlists-misc/*' -or -path '*/wordlists-user-passwd/*' \) | grep -vi -e 'README'" &
+generate 'digination/dirbuster-ng.git' 'dirbuster-ng' "find ./ -type f \( -path '*/wordlists/*' \)" &
+generate 'foospidy/payloads.git' 'foospidy' "find ./ -type f \( -path '*/other/*' -or -path '*/owasp/*' \)" &
+generate 'pownjs/pown-lists.git' 'pown-lists' "find ./ -type f \( -path '*/data/*' \)" &
+generate 'danielmiessler/SecLists.git' 'seclists' "find ./ -type f \( -path '*' \) | grep -vi -e 'Web-Shells' -e 'Payloads' -e 'icloud'" &
+generate 'berzerk0/Probable-Wordlists.git' 'probable-wordlists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md' -e '.rule' -e '.torrent'" &
+generate 'danielmiessler/RobotsDisallowed.git' 'robots-disallowed' "ls *.txt" &
+generate 'assetnote/commonspeak2-wordlists.git' 'commonspeak2' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
+generate 'arkadiyt/bounty-targets-data.git' 'bounty-targets-data' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
+generate 'random-robbie/bruteforce-lists.git' 'random-robbie-bruteforce-lists' "find ./ -type f \( -path '*' \) | grep -vi -e '.md'" &
 
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/seclists.js
-
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/berzerk0/Probable-Wordlists'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'probable-wordlists': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e 'LICENSE' -e '.md' -e '.rule' -e '.torrent' -e '.png' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/berzerk0/Probable-Wordlists@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
-
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/probable-wordlists.js
-
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/danielmiessler/RobotsDisallowed'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'robots-disallowed': {"
-    ls *.txt | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/danielmiessler/RobotsDisallowed@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
-
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/robots-disallowed.js
-
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/assetnote/commonspeak2-wordlists'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'commonspeak2': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e 'LICENSE' -e '.md' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/assetnote/commonspeak2-wordlists@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
-
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/commonspeak2.js
-
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/arkadiyt/bounty-targets-data'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'bounty-targets-data': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e '.md' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/arkadiyt/bounty-targets-data@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
-
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/bounty-targets-data.js
-
-(
-    DIR=`mktemp -d`
-    cd $DIR
-    git clone --depth 1 'https://github.com/random-robbie/bruteforce-lists'
-    cd *
-    REV=`git rev-parse HEAD`
-    rm -rf ./.git*
-    echo "const dicts = {"
-    echo "    'random-robbie-bruteforce-lists': {"
-    find ./ -type f \( -path '*' \) | grep -vi -e '.md' | while read L
-    do
-        N=`echo $L | cut -d '/' -f2-`
-        P="$URL/random-robbie/bruteforce-lists@$REV/$N"
-		S="`cat "$L" | wc -l | tr -d ' '` lines, `cat "$L" | wc -c | tr -d ' '` bytes"
-
-        echo "        `jq -n --arg n "$N" '$n'`: {uri: `jq -n --arg p "$P" '$p'`, stats: `jq -n --arg s "$S" '$s'`},"
-    done
-    echo "    }"
-    echo "}"
-    echo
-    echo "exports.dicts = dicts"
-    rm -rf $DIR
-) > $DIR/../lib/dicts/random-robbie-bruteforce-lists.js
+wait
