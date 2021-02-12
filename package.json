@@ -28,7 +28,7 @@
   },
   "pown": {
     "commands": [
-      "commands/dicts.js"
+      "commands/dicts"
     ]
   },
   "dependencies": {

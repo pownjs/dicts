@@ -1,6 +1,7 @@
 exports.yargs = {
     command: 'dicts [options] <search>',
     describe: 'Assorted Dictionaries',
+    aliases: ['dict', 'dictionaries', 'dictionary'],
 
     builder: {
         download: {
